@@ -1,10 +1,13 @@
-﻿using SipayApi.Base.BaseModel;
+﻿using Microsoft.EntityFrameworkCore;
+using SipayApi.Base.BaseModel;
 using SipayApi.DataAccess.ApplicationDbContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using static Dapper.SqlMapper;
 
 namespace SipayApi.DataAccess.Repository.Base
 {
@@ -44,6 +47,13 @@ namespace SipayApi.DataAccess.Repository.Base
         {
             return _simDbContext.Set<T>().AsQueryable();
         }
+
+
+        public List<T> GetByParameter(Expression<Func<T, bool>> expression)
+        {
+            return _simDbContext.Set<T>().Where(expression).ToList();
+        }
+
 
         public T GetById(int id)
         {

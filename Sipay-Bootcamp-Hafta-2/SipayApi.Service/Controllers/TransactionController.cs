@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SipayApi.Base.Response;
 using SipayApi.DataAccess.Domain;
 using SipayApi.DataAccess.Repository;
+using System.Collections.Generic;
 using System.Transactions;
 using Transaction = SipayApi.DataAccess.Domain.Transaction;
 
@@ -18,45 +19,16 @@ namespace SipayApi.Service.Controllers
             this.repository = repository;
         }
 
-
-        [HttpGet]
-        public ApiResponse<List<Transaction>> GetAll()
+        [HttpGet("GetByParameters")]
+        public ApiResponse<List<Transaction>> GetByParameters(int accountNumber, decimal? minCreditAmount, decimal? maxCreditAmount,
+                                                                 decimal? minDebitAmount, decimal? maxDebitAmount, string description,
+                                                                 DateTime? beginDate, DateTime? endDate, string referenceNumber)
         {
-            var entityList = repository.GetAll();
-            return new ApiResponse<List<Transaction>>(entityList);
+            var List = repository.GetByParameter(accountNumber,minCreditAmount,maxCreditAmount,minDebitAmount,maxDebitAmount,description,beginDate,endDate,referenceNumber);
+
+           
+            return new ApiResponse<List<Transaction>>(List);
         }
-
-        [HttpGet("{id}")]
-        public ApiResponse<Transaction> Get(int id)
-        {
-            var entity = repository.GetById(id);
-            return new ApiResponse<Transaction>(entity);
-        }
-
-
-        [HttpPost]
-        public ApiResponse Post([FromBody] Transaction request)
-        {
-            repository.Insert(request);
-            return new ApiResponse();
-        }
-
-        [HttpPut("{id}")]
-        public ApiResponse Put(int id, [FromBody] Transaction request)
-        {
-            repository.Update(request);
-            return new ApiResponse();
-        }
-
-
-        [HttpDelete("{id}")]
-        public ApiResponse Delete(int id)
-        {
-            repository.DeleteById(id);
-            return new ApiResponse();
-        }
-
-
     }
 
 }

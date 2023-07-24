@@ -12,8 +12,10 @@ namespace SipayApi.DataAccess.Repository
 {
     public interface ITransactionRepository : IGenericRepository<Transaction>
     {
-
-
-
+        List<Transaction> GetByParameter(int accountNumber, decimal? minAmountCredit, decimal? maxAmountCredit,
+                                     decimal? minAmountDebit, decimal? maxAmountDebit,
+                                     string description, DateTime? beginDate, DateTime? endDate,
+                                     string referenceNumber);
     }
+
 }
